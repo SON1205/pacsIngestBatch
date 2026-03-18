@@ -249,3 +249,6 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/java,macos,intellij+iml,gradle,netbeans,visualstudiocode,windows,dotenv
+
+## Claude
+CLAUDE.md

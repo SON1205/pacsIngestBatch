@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class MedIngestExApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MedIngestExApplication.class, args);
+        System.exit(SpringApplication.exit(SpringApplication.run(MedIngestExApplication.class, args)));
     }
 
 }

@@ -22,6 +22,8 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url "https://www.dcm4che.org/maven2" }
+    maven { url "https://raw.github.com/nroduit/mvn-repo/master/" }
 }
 
 dependencies {
@@ -31,7 +33,13 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-batch-jdbc-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-batch-test'
+    runtimeOnly 'org.postgresql:postgresql'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // dcm4che DICOM Toolkit & Library
+    implementation 'org.dcm4che:dcm4che-core:5.34.1'
+    implementation 'org.dcm4che.tool:dcm4che-tool-common:5.34.1'
+    implementation 'org.dcm4che.tool:dcm4che-tool-dcm2json:5.34.1'
 }
 
 tasks.named('test') {
