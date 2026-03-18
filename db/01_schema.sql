@@ -81,7 +81,7 @@ CREATE TABLE dicom_study_directory (
                                        id            BIGSERIAL PRIMARY KEY,
                                        full_path     VARCHAR(2048) NOT NULL UNIQUE,
                                        modality      VARCHAR(16)   NOT NULL,
-                                       file_count    INTEGER       NOT NULL DEFAULT 0,
+                                       file_count    BIGINT        NOT NULL DEFAULT 0,
                                        scan_status   VARCHAR(20)   NOT NULL DEFAULT 'SCANNED',
                                        created_at    TIMESTAMP     NOT NULL DEFAULT NOW(),
                                        updated_at    TIMESTAMP     NOT NULL DEFAULT NOW()
@@ -91,6 +91,7 @@ CREATE TABLE dicom_study_directory_detail (
                                               id               BIGINT PRIMARY KEY REFERENCES dicom_study_directory(id),
                                               root_folder      VARCHAR(50),
                                               sub_folder       VARCHAR(50),
+                                              study_date       VARCHAR(8),
                                               dir_name         VARCHAR(512),
                                               patient_id       VARCHAR(64),
                                               exam_date        VARCHAR(8),
