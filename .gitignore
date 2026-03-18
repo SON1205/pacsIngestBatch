@@ -252,3 +252,6 @@ gradle-app.setting
 
 ## Claude
 CLAUDE.md
+
+## yaml
+src/main/resources/application-dev.yaml
