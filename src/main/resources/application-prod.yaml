@@ -1,6 +1,6 @@
 pacs:
   root-path: /home/planitsq/PACS
-  chunk-size: 200
+  chunk-size: 1000
   skip-limit: 10
 
 logging:
@@ -9,4 +9,4 @@ logging:
     com.planitsquare.medingestex: INFO
     org.springframework.batch: INFO
   file:
-    name: /var/log/medingestex/app.log
+    name: ./logs/app.log

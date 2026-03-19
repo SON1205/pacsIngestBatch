@@ -22,3 +22,4 @@ pacs:
   root-folders:
     - Midterm
     - Midterm02
+  sub-folder-pattern: "Midterm\\d{3}"
