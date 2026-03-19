@@ -16,4 +16,5 @@ public class PacsProperties {
     private String subFolderPattern;
     private int chunkSize = 100;
     private int skipLimit = 100;
+    private int retryLimit = 3;
 }

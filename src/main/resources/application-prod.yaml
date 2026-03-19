@@ -1,7 +1,8 @@
 pacs:
   root-path: /home/planitsq/PACS
   chunk-size: 1000
-  skip-limit: 10
+  skip-limit: 1000
+  retry-limit: 3
 
 logging:
   level:
