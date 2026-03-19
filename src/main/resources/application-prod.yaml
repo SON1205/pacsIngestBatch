@@ -1,0 +1,13 @@
+pacs:
+  root-path: /home/planitsq/PACS
+  chunk-size: 1000
+  skip-limit: 1000
+  retry-limit: 3
+
+logging:
+  level:
+    root: WARN
+    com.planitsquare.medingestex: INFO
+    org.springframework.batch: INFO
+  file:
+    name: ./logs/app.log

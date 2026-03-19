@@ -9,3 +9,17 @@ spring:
   batch:
     jdbc:
       initialize-schema: never
+    job:
+      name: none
+
+logging:
+  level:
+    root: INFO
+    com.planitsquare.medingestex: INFO
+    org.springframework.batch: INFO
+
+pacs:
+  root-folders:
+    - Midterm
+    - Midterm02
+  sub-folder-pattern: "Midterm\\d{3}"
