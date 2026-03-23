@@ -93,6 +93,8 @@ CREATE TABLE dicom_study_directory
     updated_at  TIMESTAMP     NOT NULL DEFAULT NOW()
 );
 
+CREATE INDEX idx_dicom_study_directory_scan_status ON dicom_study_directory (scan_status);
+
 CREATE TABLE dicom_study_directory_detail
 (
     id               BIGINT PRIMARY KEY REFERENCES dicom_study_directory (id),
@@ -104,4 +106,21 @@ CREATE TABLE dicom_study_directory_detail
     exam_date        VARCHAR(64),
     exam_time        VARCHAR(64),
     accession_number VARCHAR(256)
+);
+
+CREATE TABLE dicom_records
+(
+    dicom_record_id          BIGSERIAL PRIMARY KEY,
+    dicom_study_directory_id BIGINT         NOT NULL REFERENCES dicom_study_directory (id) UNIQUE,
+    hsp_tp_cd                VARCHAR(255),
+    pt_no                    VARCHAR(255)   NOT NULL,
+    pact_id                  VARCHAR(255),
+    file_path                VARCHAR(65000) NOT NULL,
+    acquisition_datetime     TIMESTAMP      NOT NULL,
+    study_uid                VARCHAR(255),
+    series_uid               VARCHAR(255),
+    body_part                VARCHAR(255),
+    modality                 VARCHAR(255),
+    patient_position         VARCHAR(255),
+    created_at               TIMESTAMP DEFAULT NOW()
 );

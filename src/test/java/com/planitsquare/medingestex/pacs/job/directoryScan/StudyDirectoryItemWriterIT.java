@@ -1,7 +1,11 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectoryDetail;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.batch.infrastructure.item.Chunk;
@@ -9,11 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-
-import javax.sql.DataSource;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -30,6 +29,7 @@ class StudyDirectoryItemWriterIT {
     @BeforeEach
     void setUp() {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update("DELETE FROM dicom_records");
         jdbcTemplate.update("DELETE FROM dicom_study_directory_detail");
         jdbcTemplate.update("DELETE FROM dicom_study_directory");
     }
@@ -44,7 +44,8 @@ class StudyDirectoryItemWriterIT {
                 "SELECT COUNT(*) FROM dicom_study_directory WHERE full_path = '/test/path/study1'", Integer.class))
                 .isEqualTo(1);
         assertThat(jdbcTemplate.queryForObject(
-                "SELECT COUNT(*) FROM dicom_study_directory_detail WHERE dir_name = 'PT001_20240101_120000_ACC123_CT'", Integer.class))
+                "SELECT COUNT(*) FROM dicom_study_directory_detail WHERE dir_name = 'PT001_20240101_120000_ACC123_CT'",
+                Integer.class))
                 .isEqualTo(1);
     }
 

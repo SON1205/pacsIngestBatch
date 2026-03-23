@@ -1,17 +1,16 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.planitsquare.medingestex.config.PacsProperties;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-import org.springframework.batch.infrastructure.item.ExecutionContext;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.springframework.batch.infrastructure.item.ExecutionContext;
 
 class StudyDirectoryItemReaderTest {
 

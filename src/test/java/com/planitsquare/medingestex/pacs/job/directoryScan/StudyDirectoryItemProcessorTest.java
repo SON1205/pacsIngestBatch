@@ -1,13 +1,12 @@
-package com.planitsquare.medingestex.pacs.job;
-
-import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 class StudyDirectoryItemProcessorTest {
 

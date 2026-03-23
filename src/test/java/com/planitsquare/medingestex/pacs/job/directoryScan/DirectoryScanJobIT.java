@@ -1,7 +1,12 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.planitsquare.medingestex.config.PacsProperties;
 import com.planitsquare.medingestex.config.TestBatchConfig;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -15,12 +20,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ActiveProfiles;
-
-import javax.sql.DataSource;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -44,6 +43,7 @@ class DirectoryScanJobIT {
     @BeforeEach
     void setUp() {
         jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate.update("DELETE FROM dicom_records");
         jdbcTemplate.update("DELETE FROM dicom_study_directory_detail");
         jdbcTemplate.update("DELETE FROM dicom_study_directory");
         jobRepositoryTestUtils.removeJobExecutions();

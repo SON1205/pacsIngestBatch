@@ -15,8 +15,9 @@ pacs:
   root-folders:
     - Midterm
   sub-folder-pattern: "Midterm\\d{3}"
-  chunk-size: 2
-  skip-limit: 5
+  directory-scan:
+    chunk-size: 2
+    skip-limit: 5
 
 logging:
   level:

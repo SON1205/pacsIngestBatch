@@ -1,10 +1,13 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
 
 import com.planitsquare.medingestex.config.BatchConfig;
 import com.planitsquare.medingestex.config.PacsProperties;
 import com.planitsquare.medingestex.listener.SkipLoggingListener;
 import com.planitsquare.medingestex.listener.StepMetricsListener;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Path;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.job.Job;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -13,10 +16,6 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.TransientDataAccessException;
-
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Path;
 
 @Configuration
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class DirectoryScanJobConfig {
                                   StudyDirectoryItemProcessor processor,
                                   StudyDirectoryItemWriter writer) {
         return new StepBuilder("directoryScanStep", batch.getJobRepository())
-                .<Path, DicomStudyDirectory>chunk(pacsProperties.getChunkSize())
+                .<Path, DicomStudyDirectory>chunk(pacsProperties.getDirectoryScan().getChunkSize())
                 .transactionManager(batch.getTxManager())
                 .reader(reader)
                 .processor(processor)
@@ -49,10 +48,10 @@ public class DirectoryScanJobConfig {
                 .listener(skipLoggingListener)
                 .faultTolerant()
                 .retry(TransientDataAccessException.class)
-                .retryLimit(pacsProperties.getRetryLimit())
+                .retryLimit(pacsProperties.getDirectoryScan().getRetryLimit())
                 .skip(IOException.class, UncheckedIOException.class, SecurityException.class)
                 .skip(TransientDataAccessException.class)
-                .skipLimit(pacsProperties.getSkipLimit())
+                .skipLimit(pacsProperties.getDirectoryScan().getSkipLimit())
                 .build();
     }
 }

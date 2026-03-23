@@ -1,8 +1,19 @@
 pacs:
   root-path: /home/planitsq/PACS
-  chunk-size: 1000
-  skip-limit: 1000
-  retry-limit: 3
+  directory-scan:
+    chunk-size: 1000
+    skip-limit: 1000
+    retry-limit: 3
+  dicom-parse:
+    chunk-size: 20
+    skip-limit: 10000
+    grid-size: 8
+    thread-count: 8
+
+spring:
+  datasource:
+    hikari:
+      maximum-pool-size: 20
 
 logging:
   level:

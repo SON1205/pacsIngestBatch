@@ -1,4 +1,4 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
 
 import com.planitsquare.medingestex.config.PacsProperties;
 import java.io.IOException;
