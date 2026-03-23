@@ -1,7 +1,7 @@
 package com.planitsquare.medingestex.listener;
 
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.listener.ChunkListener;
@@ -28,7 +28,7 @@ public class ChunkMetricsListener implements ChunkListener<Object, Object>, Step
             return;
         }
 
-        Duration elapsed = Duration.between(step.getStartTime(), Instant.now());
+        Duration elapsed = Duration.between(step.getStartTime(), LocalDateTime.now());
         long written = step.getWriteCount();
         long skipped = step.getSkipCount();
         double throughput = elapsed.toSeconds() > 0 ? (double) written / elapsed.toSeconds() : 0;
