@@ -1,4 +1,4 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
 
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
 import javax.sql.DataSource;

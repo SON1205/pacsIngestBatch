@@ -1,4 +1,4 @@
-package com.planitsquare.medingestex.pacs.job;
+package com.planitsquare.medingestex.pacs.job.directoryScan;
 
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectoryDetail;
@@ -20,7 +20,8 @@ public class StudyDirectoryItemProcessor implements ItemProcessor<Path, DicomStu
         String subFolder = path.getParent().getParent().getParent().getFileName().toString();
         String rootFolder = path.getParent().getParent().getParent().getParent().getFileName().toString();
         String dirName = path.getFileName().toString();
-        DicomStudyDirectoryDetail detail = DicomStudyDirectoryDetail.fromDirName(dirName, rootFolder, subFolder, studyDate);
+        DicomStudyDirectoryDetail detail = DicomStudyDirectoryDetail.fromDirName(dirName, rootFolder, subFolder,
+                studyDate);
 
         return DicomStudyDirectory.of(path.toAbsolutePath().toString(), modality, detail);
     }

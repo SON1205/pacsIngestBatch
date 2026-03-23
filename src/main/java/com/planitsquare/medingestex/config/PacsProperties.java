@@ -14,7 +14,23 @@ public class PacsProperties {
     private String rootPath;
     private List<String> rootFolders;
     private String subFolderPattern;
-    private int chunkSize = 100;
-    private int skipLimit = 100;
-    private int retryLimit = 3;
+    private DirectoryScan directoryScan = new DirectoryScan();
+    private DicomParse dicomParse = new DicomParse();
+
+    @Getter
+    @Setter
+    public static class DirectoryScan {
+        private int chunkSize = 100;
+        private int skipLimit = 100;
+        private int retryLimit = 3;
+    }
+
+    @Getter
+    @Setter
+    public static class DicomParse {
+        private int chunkSize = 10;
+        private int skipLimit = 1000;
+        private int gridSize = 8;
+        private int threadCount = 8;
+    }
 }
