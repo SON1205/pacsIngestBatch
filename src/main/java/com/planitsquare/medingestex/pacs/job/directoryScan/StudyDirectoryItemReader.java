@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,7 @@ import org.springframework.stereotype.Component;
 public class StudyDirectoryItemReader implements ItemStreamReader<Path> {
 
     private static final String CURRENT_INDEX_KEY = "study.directory.reader.current.index";
-    private static final String EXCLUDED_DIR = "Delete_Backup";
+    private static final Set<String> EXCLUDED_DIRS = Set.of("Delete", "Delete_Backup");
 
     private final PacsProperties pacsProperties;
     private Iterator<Path> iterator;
@@ -119,7 +120,7 @@ public class StudyDirectoryItemReader implements ItemStreamReader<Path> {
 
     private List<Path> collectStudyDirsUnder(Path subFolder) {
         return listSorted(subFolder).stream()
-                .filter(date -> !EXCLUDED_DIR.equals(date.getFileName().toString()))
+                .filter(date -> !EXCLUDED_DIRS.contains(date.getFileName().toString()))
                 .flatMap(date -> listSorted(date).stream())
                 .flatMap(modality -> listSorted(modality).stream())
                 .toList();
