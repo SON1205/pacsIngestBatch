@@ -24,7 +24,8 @@ public class DicomParseItemWriter implements ItemWriter<DicomRecord> {
             """;
 
     private static final String UPDATE_STATUS_SQL = """
-            UPDATE dicom_study_directory SET scan_status = 'PARSED', updated_at = NOW()
+            UPDATE dicom_study_directory
+            SET scan_status = 'PARSED', total_size_bytes = :totalSizeBytes, updated_at = NOW()
             WHERE id = :dicomStudyDirectoryId
             """;
 

@@ -28,7 +28,7 @@ class SkipLoggingListenerTest {
     void onSkipInWrite_logsFullPathAndError() {
         DicomStudyDirectoryDetail detail = DicomStudyDirectoryDetail.fromDirName(
                 "PT001_20240101_120000_ACC123_CT", "Midterm", "Sub001", "20240101");
-        DicomStudyDirectory item = DicomStudyDirectory.of("/test/path/study1", "CT", detail);
+        DicomStudyDirectory item = DicomStudyDirectory.of("/test/path/study1", "CT", 0L, detail);
 
         assertThatCode(() -> listener.onSkipInWrite(item, new RuntimeException("write error")))
                 .doesNotThrowAnyException();

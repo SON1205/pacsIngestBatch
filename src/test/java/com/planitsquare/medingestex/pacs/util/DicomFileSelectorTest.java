@@ -33,10 +33,11 @@ class DicomFileSelectorTest {
         writeDicomFile(dir.resolve("s2_2.dcm"), series2, 2, "PT001");
         writeDicomFile(dir.resolve("s2_3.dcm"), series2, 3, "PT001");
 
-        Attributes result = DicomFileSelector.selectRepresentativeFile(dir, "CT");
+        var result = DicomFileSelector.selectRepresentativeFile(dir, "CT");
 
-        assertThat(result.getString(Tag.SeriesInstanceUID)).isEqualTo(series2);
-        assertThat(result.getInt(Tag.InstanceNumber, 0)).isEqualTo(2);
+        assertThat(result.attrs().getString(Tag.SeriesInstanceUID)).isEqualTo(series2);
+        assertThat(result.attrs().getInt(Tag.InstanceNumber, 0)).isEqualTo(2);
+        assertThat(result.totalSizeBytes()).isGreaterThan(0);
     }
 
     @Test
@@ -46,10 +47,10 @@ class DicomFileSelectorTest {
         writeDicomFile(dir.resolve("s1_2.dcm"), series1, 2, "PT001");
         writeDicomFile(dir.resolve("s1_3.dcm"), series1, 3, "PT001");
 
-        Attributes result = DicomFileSelector.selectRepresentativeFile(dir, "MR");
+        var result = DicomFileSelector.selectRepresentativeFile(dir, "MR");
 
-        assertThat(result.getString(Tag.SeriesInstanceUID)).isEqualTo(series1);
-        assertThat(result.getInt(Tag.InstanceNumber, 0)).isEqualTo(2);
+        assertThat(result.attrs().getString(Tag.SeriesInstanceUID)).isEqualTo(series1);
+        assertThat(result.attrs().getInt(Tag.InstanceNumber, 0)).isEqualTo(2);
     }
 
     @Test
@@ -61,10 +62,10 @@ class DicomFileSelectorTest {
         writeDicomFile(dir.resolve("f2.dcm"), series1, 2, "PT001");
         writeDicomFile(dir.resolve("f3.dcm"), series2, 1, "PT001");
 
-        Attributes result = DicomFileSelector.selectRepresentativeFile(dir, "DX");
+        var result = DicomFileSelector.selectRepresentativeFile(dir, "DX");
 
-        assertThat(result.getString(Tag.SeriesInstanceUID)).isEqualTo(series1);
-        assertThat(result.getInt(Tag.InstanceNumber, 0)).isEqualTo(2);
+        assertThat(result.attrs().getString(Tag.SeriesInstanceUID)).isEqualTo(series1);
+        assertThat(result.attrs().getInt(Tag.InstanceNumber, 0)).isEqualTo(2);
     }
 
     @Test
@@ -78,10 +79,10 @@ class DicomFileSelectorTest {
     void selectRepresentativeFile_singleFile_returnsThatFile(@TempDir Path dir) throws Exception {
         writeDicomFile(dir.resolve("only.dcm"), "1.2.3.1", 1, "PT001");
 
-        Attributes result = DicomFileSelector.selectRepresentativeFile(dir, "CT");
+        var result = DicomFileSelector.selectRepresentativeFile(dir, "CT");
 
-        assertThat(result.getString(Tag.PatientID)).isEqualTo("PT001");
-        assertThat(result.getInt(Tag.InstanceNumber, 0)).isEqualTo(1);
+        assertThat(result.attrs().getString(Tag.PatientID)).isEqualTo("PT001");
+        assertThat(result.attrs().getInt(Tag.InstanceNumber, 0)).isEqualTo(1);
     }
 
     // ── pickTargetFile (unit, no file I/O) ──────────────────────────

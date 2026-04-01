@@ -10,15 +10,18 @@ public class DicomStudyDirectory {
     private Long id;
     private String fullPath;
     private String modality;
+    private long totalSizeBytes;
     @Builder.Default
     private String scanStatus = "SCANNED";
-    
+
     private DicomStudyDirectoryDetail detail;
 
-    public static DicomStudyDirectory of(String fullPath, String modality, DicomStudyDirectoryDetail detail) {
+    public static DicomStudyDirectory of(String fullPath, String modality, long totalSizeBytes,
+                                          DicomStudyDirectoryDetail detail) {
         return DicomStudyDirectory.builder()
                 .fullPath(fullPath)
                 .modality(modality)
+                .totalSizeBytes(totalSizeBytes)
                 .detail(detail)
                 .build();
     }

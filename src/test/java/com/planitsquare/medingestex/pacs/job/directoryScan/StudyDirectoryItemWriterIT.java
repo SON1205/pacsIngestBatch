@@ -81,7 +81,7 @@ class StudyDirectoryItemWriterIT {
     void write_nullDetailFields_insertsWithNulls() throws Exception {
         DicomStudyDirectoryDetail detail = DicomStudyDirectoryDetail.fromDirName(
                 "shortname", "Midterm", "Midterm001", "20240101");
-        DicomStudyDirectory item = DicomStudyDirectory.of("/test/path/nullfields", "CT", detail);
+        DicomStudyDirectory item = DicomStudyDirectory.of("/test/path/nullfields", "CT", 0L, detail);
 
         assertThatCode(() -> writer.write(new Chunk<>(item))).doesNotThrowAnyException();
 
@@ -93,6 +93,6 @@ class StudyDirectoryItemWriterIT {
     private DicomStudyDirectory createStudyDirectory(String fullPath, String modality) {
         DicomStudyDirectoryDetail detail = DicomStudyDirectoryDetail.fromDirName(
                 "PT001_20240101_120000_ACC123_CT", "Midterm", "Midterm001", "20240101");
-        return DicomStudyDirectory.of(fullPath, modality, detail);
+        return DicomStudyDirectory.of(fullPath, modality, 1024L, detail);
     }
 }

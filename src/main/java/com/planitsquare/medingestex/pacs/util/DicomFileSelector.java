@@ -35,20 +35,24 @@ public class DicomFileSelector {
     private static final int SNAPSHOT_STOP_TAG = Tag.InstanceNumber + 1;
     private static final Set<String> MULTI_SERIES_MODALITIES = Set.of("CT", "MR");
 
-    public static Attributes selectRepresentativeFile(Path studyDir, String modality) throws IOException {
-        List<FileSnapshot> snapshots = collectFileSnapshots(studyDir);
+    public record SelectionResult(Path selectedFile, Attributes attrs, long totalSizeBytes) {}
+
+    public static SelectionResult selectRepresentativeFile(Path studyDir, String modality) throws IOException {
+        long[] totalSize = {0L};
+        List<FileSnapshot> snapshots = collectFileSnapshots(studyDir, totalSize);
         if (snapshots.isEmpty()) {
             throw new IOException("No DICOM files found in: " + studyDir);
         }
 
         Path targetFile = pickTargetFile(snapshots, modality);
-        return readDicomHeader(targetFile);
+        return new SelectionResult(targetFile, readDicomHeader(targetFile), totalSize[0]);
     }
 
-    private static List<FileSnapshot> collectFileSnapshots(Path dir) throws IOException {
+    private static List<FileSnapshot> collectFileSnapshots(Path dir, long[] totalSize) throws IOException {
         List<FileSnapshot> snapshots = new ArrayList<>();
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir, Files::isRegularFile)) {
             for (Path path : stream) {
+                totalSize[0] += Files.size(path);
                 try {
                     snapshots.add(readFileSnapshot(path));
                 } catch (IOException ignored) {
