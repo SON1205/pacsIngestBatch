@@ -9,6 +9,7 @@ import com.planitsquare.medingestex.pacs.domain.DicomRecord;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectoryRow;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -90,17 +91,31 @@ public class DicomParseJobConfig {
     @Bean
     @StepScope
     public JdbcPagingItemReader<DicomStudyDirectoryRow> dicomParseReader(
+            @Value("#{stepExecutionContext['modalities']}") String modalities,
             @Value("#{stepExecutionContext['minId']}") Long minId,
             @Value("#{stepExecutionContext['maxId']}") Long maxId) throws Exception {
         PacsProperties.DicomParse config = pacsProperties.getDicomParse();
+
+        String[] mods = modalities.split(",");
+        StringBuilder inClause = new StringBuilder();
+        Map<String, Object> params = new HashMap<>();
+        for (int i = 0; i < mods.length; i++) {
+            if (i > 0) inClause.append(", ");
+            String paramName = "mod" + i;
+            inClause.append(":").append(paramName);
+            params.put(paramName, mods[i]);
+        }
+        params.put("minId", minId);
+        params.put("maxId", maxId);
+
         return new JdbcPagingItemReaderBuilder<DicomStudyDirectoryRow>()
                 .name("dicomParseReader")
                 .dataSource(batch.getDataSource())
                 .selectClause("SELECT id, full_path, modality")
                 .fromClause("FROM dicom_study_directory")
-                .whereClause("WHERE id BETWEEN :minId AND :maxId AND scan_status = 'SCANNED'")
+                .whereClause("WHERE modality IN (" + inClause + ") AND id BETWEEN :minId AND :maxId AND scan_status = 'SCANNED'")
                 .sortKeys(Map.of("id", Order.ASCENDING))
-                .parameterValues(Map.of("minId", minId, "maxId", maxId))
+                .parameterValues(params)
                 .rowMapper(new DataClassRowMapper<>(DicomStudyDirectoryRow.class))
                 .pageSize(config.getChunkSize())
                 .build();
@@ -114,7 +129,7 @@ public class DicomParseJobConfig {
 
     @Bean
     public Partitioner dicomParsePartitioner() {
-        return new IdRangePartitioner(batch.getDataSource());
+        return new ModalityPartitioner(batch.getDataSource());
     }
 
     @Bean
