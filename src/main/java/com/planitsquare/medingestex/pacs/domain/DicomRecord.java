@@ -16,4 +16,5 @@ public class DicomRecord {
     private String bodyPart;
     private String modality;
     private String patientPosition;
+    private long totalSizeBytes;
 }

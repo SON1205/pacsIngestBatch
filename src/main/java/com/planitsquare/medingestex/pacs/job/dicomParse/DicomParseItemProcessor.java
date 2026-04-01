@@ -3,6 +3,7 @@ package com.planitsquare.medingestex.pacs.job.dicomParse;
 import com.planitsquare.medingestex.pacs.domain.DicomRecord;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectoryRow;
 import com.planitsquare.medingestex.pacs.util.DicomFileSelector;
+import com.planitsquare.medingestex.pacs.util.DicomFileSelector.SelectionResult;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,34 +35,38 @@ public class DicomParseItemProcessor implements ItemProcessor<DicomStudyDirector
         Path studyDir = Path.of(row.fullPath());
 
         long start = System.nanoTime();
-        Attributes attrs = DicomFileSelector.selectRepresentativeFile(studyDir, row.modality());
+        SelectionResult result = DicomFileSelector.selectRepresentativeFile(studyDir, row.modality());
         long elapsedMs = (System.nanoTime() - start) / 1_000_000;
         logSlowSelect(elapsedMs, row);
 
+        Attributes attrs = result.attrs();
         String patientId = attrs.getString(Tag.PatientID);
+        // patientId에 대한 검증이 필요하면 여기에 작성
         if (patientId == null) {
             log.warn("PatientID is null, filtering out: {}", row.fullPath());
             return null;
         }
 
         LocalDateTime acquisitionDatetime = parseAcquisitionDatetime(attrs);
-        DicomRecord record = buildRecord(row, attrs, patientId, acquisitionDatetime);
+        DicomRecord record = buildRecord(row, result.selectedFile(), attrs, patientId, acquisitionDatetime,
+                result.totalSizeBytes());
         logParsedResult(record, elapsedMs);
         return record;
     }
 
-    private DicomRecord buildRecord(DicomStudyDirectoryRow row, Attributes attrs,
-                                    String patientId, LocalDateTime acquisitionDatetime) {
+    private DicomRecord buildRecord(DicomStudyDirectoryRow row, Path selectedFile, Attributes attrs,
+                                    String patientId, LocalDateTime acquisitionDatetime, long totalSizeBytes) {
         return DicomRecord.builder()
                 .dicomStudyDirectoryId(row.id())
                 .ptNo(patientId)
-                .filePath(row.fullPath())
+                .filePath(selectedFile.toString())
                 .acquisitionDatetime(acquisitionDatetime)
                 .studyUid(attrs.getString(Tag.StudyInstanceUID))
                 .seriesUid(attrs.getString(Tag.SeriesInstanceUID))
                 .bodyPart(attrs.getString(Tag.BodyPartExamined))
                 .modality(attrs.getString(Tag.Modality))
                 .patientPosition(attrs.getString(Tag.PatientPosition))
+                .totalSizeBytes(totalSizeBytes)
                 .build();
     }
 

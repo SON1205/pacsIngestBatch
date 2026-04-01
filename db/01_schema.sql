@@ -85,15 +85,17 @@ CREATE SEQUENCE BATCH_JOB_INSTANCE_SEQ MAXVALUE 9223372036854775807 NO CYCLE;
 -- scan directory
 CREATE TABLE dicom_study_directory
 (
-    id          BIGSERIAL PRIMARY KEY,
-    full_path   VARCHAR(2048) NOT NULL UNIQUE,
-    modality    VARCHAR(16)   NOT NULL,
-    scan_status VARCHAR(20)   NOT NULL DEFAULT 'SCANNED',
-    created_at  TIMESTAMP     NOT NULL DEFAULT NOW(),
-    updated_at  TIMESTAMP     NOT NULL DEFAULT NOW()
+    id               BIGSERIAL PRIMARY KEY,
+    full_path        VARCHAR(2048) NOT NULL UNIQUE,
+    modality         VARCHAR(16)   NOT NULL,
+    total_size_bytes BIGINT        NOT NULL DEFAULT 0,
+    scan_status      VARCHAR(20)   NOT NULL DEFAULT 'SCANNED',
+    created_at       TIMESTAMP     NOT NULL DEFAULT NOW(),
+    updated_at       TIMESTAMP     NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_dicom_study_directory_scan_status ON dicom_study_directory (scan_status);
+CREATE INDEX idx_dicom_study_directory_modality_status ON dicom_study_directory (modality, scan_status);
 
 CREATE TABLE dicom_study_directory_detail
 (

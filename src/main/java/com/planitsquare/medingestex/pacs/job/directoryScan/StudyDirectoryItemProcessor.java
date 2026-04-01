@@ -3,12 +3,10 @@ package com.planitsquare.medingestex.pacs.job.directoryScan;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectory;
 import com.planitsquare.medingestex.pacs.domain.DicomStudyDirectoryDetail;
 import java.nio.file.Path;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.infrastructure.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
-@Slf4j
 @Component
 @StepScope
 public class StudyDirectoryItemProcessor implements ItemProcessor<Path, DicomStudyDirectory> {
@@ -23,6 +21,6 @@ public class StudyDirectoryItemProcessor implements ItemProcessor<Path, DicomStu
         DicomStudyDirectoryDetail detail = DicomStudyDirectoryDetail.fromDirName(dirName, rootFolder, subFolder,
                 studyDate);
 
-        return DicomStudyDirectory.of(path.toAbsolutePath().toString(), modality, detail);
+        return DicomStudyDirectory.of(path.toAbsolutePath().toString(), modality, 0L, detail);
     }
 }

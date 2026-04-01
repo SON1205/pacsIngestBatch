@@ -15,8 +15,8 @@ public class StudyDirectoryItemWriter implements ItemWriter<DicomStudyDirectory>
 
     private static final String INSERT_SQL = """
             WITH ins AS (
-                INSERT INTO dicom_study_directory (full_path, modality, scan_status)
-                VALUES (:fullPath, :modality, :scanStatus)
+                INSERT INTO dicom_study_directory (full_path, modality, total_size_bytes, scan_status)
+                VALUES (:fullPath, :modality, :totalSizeBytes, :scanStatus)
                 ON CONFLICT (full_path) DO NOTHING
                 RETURNING id
             )
